@@ -34,7 +34,7 @@
 
 ## 文档
 
-[http://opensource.qduoj.com/](http://opensource.qduoj.com/)
+[https://opensource.qduoj.com/](https://opensource.qduoj.com/)
 
 ## 截图
 
@@ -82,4 +82,4 @@ Modern browsers(chrome, firefox) 和 Internet Explorer 10+.
 
 ## 许可
 
-The [MIT](http://opensource.org/licenses/MIT) License
+The [MIT](https://opensource.org/licenses/MIT) License

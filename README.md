@@ -34,7 +34,7 @@ Follow me:  [https://github.com/QingdaoU/OnlineJudgeDeploy/tree/2.0](https://git
 
 ## Documents
 
-[http://opensource.qduoj.com/](http://opensource.qduoj.com/)
+[https://opensource.qduoj.com/](https://opensource.qduoj.com/)
 
 ## Screenshots
 
@@ -82,4 +82,4 @@ Modern browsers(chrome, firefox) and Internet Explorer 10+.
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT)
+[MIT](https://opensource.org/licenses/MIT)

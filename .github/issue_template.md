@@ -1,6 +1,6 @@
 在提交issue之前请
 
-  - 认真阅读文档 http://docs.onlinejudge.me/#/
+  - 认真阅读文档 https://opensource.qduoj.com/#/
   - 搜索和查看历史issues
   - 安全类问题请不要在 GitHub 上公布，请发送邮件到 `admin@qduoj.com`，根据漏洞危害程度发送红包感谢。
  
