@@ -19,7 +19,7 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          esa/oj-image-backend
+          images: ghcr.io/${{ github.repository_owner }}/oj-image-backend
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
