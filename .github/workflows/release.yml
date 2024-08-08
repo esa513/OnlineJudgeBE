@@ -19,11 +19,7 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          registry.cn-hongkong.aliyuncs.com/oj-image/backend
-        tags: |
-          type=semver,pattern={{version}}
-          type=semver,pattern={{major}}.{{minor}}
-          type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
+          esa/oj-image-backend
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -44,4 +40,5 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: ${{ steps.metadata.outputs.tags }}
-        annotations: ${{ steps.metadata.outputs.annotations }}
+        labels: ${{ steps.meta.outputs.labels }}
+
