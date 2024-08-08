@@ -19,7 +19,7 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: |
-          images: ghcr.io/${{ github.repository_owner }}/oj-image-backend
+          ghcr.io/${{ github.repository_owner }}/oj-image-backend
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3
@@ -40,5 +40,5 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: ${{ steps.metadata.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+        labels: ${{ steps.metadata.outputs.labels }}
 
