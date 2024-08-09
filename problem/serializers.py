@@ -193,8 +193,8 @@ class ExportProblemSerializer(serializers.ModelSerializer):
         model = Problem
         fields = ("display_id", "title", "description", "tags",
                   "input_description", "output_description",
-                  "test_case_score", "hint", "time_limit", "memory_limit", "samples",
-                  "template", "io_mode", "spj", "rule_type", "visible", "source", "template")
+                  "test_case_score", "hint", "languages", "time_limit", "memory_limit", "samples",
+                  "template", "io_mode", "spj", "rule_type", "visible", "source")
 
 
 class AddContestProblemSerializer(serializers.Serializer):
@@ -246,6 +246,7 @@ class ImportProblemSerializer(serializers.Serializer):
     output_description = FormatValueSerializer()
     hint = FormatValueSerializer()
     test_case_score = serializers.ListField(child=TestCaseScoreSerializer(), allow_null=True)
+    language = LanguageNameMultiChoiceField()
     time_limit = serializers.IntegerField(min_value=1, max_value=60000)
     memory_limit = serializers.IntegerField(min_value=1, max_value=10240)
     samples = serializers.ListField(child=CreateSampleSerializer())
