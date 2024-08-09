@@ -246,7 +246,7 @@ class ImportProblemSerializer(serializers.Serializer):
     output_description = FormatValueSerializer()
     hint = FormatValueSerializer()
     test_case_score = serializers.ListField(child=TestCaseScoreSerializer(), allow_null=True)
-    language = LanguageNameMultiChoiceField()
+    languages = LanguageNameMultiChoiceField()
     time_limit = serializers.IntegerField(min_value=1, max_value=60000)
     memory_limit = serializers.IntegerField(min_value=1, max_value=10240)
     samples = serializers.ListField(child=CreateSampleSerializer())
