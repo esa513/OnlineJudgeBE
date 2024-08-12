@@ -5,6 +5,7 @@ import os
 import tempfile
 import zipfile
 from wsgiref.util import FileWrapper
+from utils.shortcuts import fix_space
 
 from django.conf import settings
 from django.db import transaction
@@ -214,6 +215,7 @@ class ProblemAPI(ProblemBase):
         # todo check filename and score info
         tags = data.pop("tags")
         data["created_by"] = request.user
+        data = fix_space(data)
         problem = Problem.objects.create(**data)
 
         for item in tags:
@@ -275,6 +277,7 @@ class ProblemAPI(ProblemBase):
         # todo check filename and score info
         tags = data.pop("tags")
         data["languages"] = list(data["languages"])
+        data = fix_space(data)
 
         for k, v in data.items():
             setattr(problem, k, v)
@@ -578,6 +581,8 @@ class ImportProblemAPI(CSRFExemptAPIView, TestCaseZipProcessor):
                             for item in problem_info["template"].keys():
                                 if item not in SysOptions.language_names:
                                     return self.error(f"Unsupported language {item}")
+                        
+                        problem_info = fix_space(problem_info, is_import=True)
 
                         problem_info["display_id"] = problem_info["display_id"][:24]
                         for k, v in problem_info["template"].items():

@@ -92,3 +92,17 @@ def check_is_id(value):
         return int(value) > 0
     except Exception:
         return False
+
+def fix_space(data, is_import=False):
+    # 在 <code></code> 內容前後加上空格
+    pattern = r'(?<!<pre>)(?<=\S)<code>([\s\S]+?)<\/code>(?!<\/pre>)'
+    def add_spaces(match):
+        return f' <code>{match.group(1).strip()}</code> '
+    
+    for key in ["description", "input_description", "output_description", "hint", "content"]:
+        if key in data:
+            if not is_import:
+                data[key] = re.sub(pattern, add_spaces, data[key])
+            else:
+                data[key]["value"] = re.sub(pattern, add_spaces, data[key]["value"])
+    return data

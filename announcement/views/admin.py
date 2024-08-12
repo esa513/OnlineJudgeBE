@@ -1,5 +1,6 @@
 from account.decorators import super_admin_required
 from utils.api import APIView, validate_serializer
+from utils.shortcuts import fix_space
 
 from announcement.models import Announcement
 from announcement.serializers import (AnnouncementSerializer, CreateAnnouncementSerializer,
@@ -14,6 +15,7 @@ class AnnouncementAdminAPI(APIView):
         publish announcement
         """
         data = request.data
+        data = fix_space(data)
         announcement = Announcement.objects.create(title=data["title"],
                                                    content=data["content"],
                                                    created_by=request.user,
@@ -31,6 +33,8 @@ class AnnouncementAdminAPI(APIView):
             announcement = Announcement.objects.get(id=data.pop("id"))
         except Announcement.DoesNotExist:
             return self.error("Announcement does not exist")
+
+        data = fix_space(data)
 
         for k, v in data.items():
             setattr(announcement, k, v)

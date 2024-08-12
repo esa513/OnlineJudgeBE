@@ -2,6 +2,7 @@ import copy
 import os
 import zipfile
 from ipaddress import ip_network
+from utils.shortcuts import fix_space
 
 import dateutil.parser
 from django.http import FileResponse
@@ -37,6 +38,7 @@ class ContestAPI(APIView):
                 ip_network(ip_range, strict=False)
             except ValueError:
                 return self.error(f"{ip_range} is not a valid cidr network")
+        data = fix_space(data)
         contest = Contest.objects.create(**data)
         return self.success(ContestAdminSerializer(contest).data)
 
@@ -62,6 +64,7 @@ class ContestAPI(APIView):
         if not contest.real_time_rank and data.get("real_time_rank"):
             cache_key = f"{CacheKey.contest_rank_cache}:{contest.id}"
             cache.delete(cache_key)
+        data = fix_space(data)
 
         for k, v in data.items():
             setattr(contest, k, v)
@@ -102,6 +105,7 @@ class ContestAnnouncementAPI(APIView):
             data["created_by"] = request.user
         except Contest.DoesNotExist:
             return self.error("Contest does not exist")
+        data = fix_space(data)
         announcement = ContestAnnouncement.objects.create(**data)
         return self.success(ContestAnnouncementSerializer(announcement).data)
 
@@ -116,6 +120,8 @@ class ContestAnnouncementAPI(APIView):
             ensure_created_by(contest_announcement, request.user)
         except ContestAnnouncement.DoesNotExist:
             return self.error("Contest announcement does not exist")
+        data = fix_space(data)
+
         for k, v in data.items():
             setattr(contest_announcement, k, v)
         contest_announcement.save()
