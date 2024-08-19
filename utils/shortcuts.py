@@ -94,15 +94,51 @@ def check_is_id(value):
         return False
 
 def fix_space(data, is_import=False):
-    # 在 <code></code> 內容前後加上空格
-    pattern = r'(?<!<pre>)(?<=\S)<code>([\s\S]+?)<\/code>(?!<\/pre>)'
+    '''
+    修正 HTML Tag 內容前後的空格問題
+    '''
+    empty_pattern_span = r"<span[^>]*><\/span>"
+    add_pattern = r"(?<=\S)<(a|span)( [^>]*)>([\s\S]+?)<\/\1>"
+    add_pattern_code = r"(?<!<pre>)(?<=\S)<(code[^>]*)>([\s\S]+?)<\/code>(?!<\/pre>)"
+    final_pattern = r"(?=[^\\])> (\.|,|:|;|!|\?)"
+
+    def remove_emptp_span(match):
+        return ""
+
     def add_spaces(match):
-        return f' <code>{match.group(1).strip()}</code> '
+        groups = get_groups(match)
+        tag_name = groups[1]
+        tag_attributes = (" " + groups[2]) if groups[2] else ""
+        tag_content = groups[3]
+        return f" <{tag_name}{tag_attributes}>{tag_content}</{tag_name}> "
     
-    for key in ["description", "input_description", "output_description", "hint", "content"]:
+    def final_replacement(match):
+        groups = get_groups(match)
+        return f">{groups[1]}"
+    
+    def get_group(match, index):
+        return match.group(index).strip()
+    
+    def get_groups(match):
+        return [get_group(match, i) for i in range(0, match.lastindex + 1)] if match.lastindex != None else []
+
+    def fix(str):
+        str = re.sub(empty_pattern_span, remove_emptp_span, str)
+        str = re.sub(add_pattern, add_spaces, str)
+        str = re.sub(add_pattern_code, add_spaces, str)
+        str = re.sub(final_pattern, final_replacement, str)
+        return str
+
+    for key in [
+        "description",
+        "input_description",
+        "output_description",
+        "hint",
+        "content",
+    ]:
         if key in data:
             if not is_import:
-                data[key] = re.sub(pattern, add_spaces, data[key])
+                data[key] = fix(data[key])
             else:
-                data[key]["value"] = re.sub(pattern, add_spaces, data[key]["value"])
+                data[key]["value"] = fix(data[key]["value"])
     return data
