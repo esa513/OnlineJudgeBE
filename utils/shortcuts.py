@@ -99,7 +99,7 @@ def fix_space(data, is_import=False):
     '''
     empty_pattern_span = r"<span[^>]*><\/span>"
     add_pattern = r"(?<=\S)<(a|span)( [^>]*)>([\s\S]+?)<\/\1>"
-    add_pattern_code = r"(?<!<pre>)(?<=\S)<(code[^>]*)>([\s\S]+?)<\/code>(?!<\/pre>)"
+    add_pattern_code = r"(?<!<pre>)(?<=\S)<(code)([^>]*)>([\s\S]+?)<\/code>(?!<\/pre>)"
     final_pattern = r"(?=[^\\])> (\.|,|:|;|!|\?)"
 
     def remove_emptp_span(match):
