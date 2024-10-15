@@ -372,7 +372,7 @@ class ContestProblemAPI(ProblemBase):
             problems = problems.filter(contest__created_by=user)
         keyword = request.GET.get("keyword")
         if keyword:
-            problems = problems.filter(title__contains=keyword)
+            problems = problems.filter(Q(title__icontains=keyword) | Q(_id__icontains=keyword))
         return self.success(self.paginate_data(request, problems, ProblemAdminSerializer))
 
     @validate_serializer(EditContestProblemSerializer)

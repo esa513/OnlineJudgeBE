@@ -87,7 +87,7 @@ class ContestAPI(APIView):
 
         keyword = request.GET.get("keyword")
         if keyword:
-            contests = contests.filter(title__contains=keyword)
+            contests = contests.filter(title__icontains=keyword)
         return self.success(self.paginate_data(request, contests, ContestAdminSerializer))
 
 
@@ -161,7 +161,7 @@ class ContestAnnouncementAPI(APIView):
             contest_announcements = contest_announcements.filter(created_by=request.user)
         keyword = request.GET.get("keyword")
         if keyword:
-            contest_announcements = contest_announcements.filter(title__contains=keyword)
+            contest_announcements = contest_announcements.filter(title__icontains=keyword)
         return self.success(ContestAnnouncementSerializer(contest_announcements, many=True).data)
 
 
