@@ -1,4 +1,6 @@
 import io
+import re
+from functools import cmp_to_key
 
 import xlsxwriter
 from django.http import HttpResponse
@@ -48,6 +50,23 @@ class ContestAPI(APIView):
 
 class ContestListAPI(APIView):
     def get(self, request):
+        def compare_(x, y):
+            # 比較順序: status=>進行中->準備中->已結束, title=>有Week->沒有Week, title=>日期排序
+            # Compare status
+            status_order = {"0": 0, "-1": 1, "1": 2}
+            if status_order[x["status"]] != status_order[y["status"]]:
+                return status_order[x["status"]] - status_order[y["status"]]
+            
+            # Compare if title contains "Week"
+            if ("Week" in x["title"]) != ("Week" in y["title"]):
+                return -1 if "Week" in x["title"] else 1
+            
+            # Compare dates in title
+            date_x = re.search(r"\d{4}/\d{2}/\d{2}", x["title"])
+            date_y = re.search(r"\d{4}/\d{2}/\d{2}", y["title"])
+            if date_x and date_y:
+                return (date_x.group(0) > date_y.group(0)) - (date_x.group(0) < date_y.group(0))
+            return 0
         contests = Contest.objects.select_related("created_by").filter(visible=True)
         keyword = request.GET.get("keyword")
         rule_type = request.GET.get("rule_type")
@@ -64,7 +83,11 @@ class ContestListAPI(APIView):
                 contests = contests.filter(end_time__lt=cur)
             else:
                 contests = contests.filter(start_time__lte=cur, end_time__gte=cur)
-        return self.success(self.paginate_data(request, contests, ContestSerializer))
+
+        contests_list = list(ContestSerializer(contests, many=True).data)
+        contests_list = sorted(contests_list, key=cmp_to_key(compare_))
+        
+        return self.success(self.paginate_data(request, contests_list))
 
 
 class ContestPasswordVerifyAPI(APIView):
