@@ -338,6 +338,7 @@ class ContestProblemAPI(ProblemBase):
         data["contest"] = contest
         tags = data.pop("tags")
         data["created_by"] = request.user
+        data = fix_space(data)
         problem = Problem.objects.create(**data)
 
         for item in tags:
@@ -408,6 +409,7 @@ class ContestProblemAPI(ProblemBase):
         # todo check filename and score info
         tags = data.pop("tags")
         data["languages"] = list(data["languages"])
+        data = fix_space(data)
 
         for k, v in data.items():
             setattr(problem, k, v)
