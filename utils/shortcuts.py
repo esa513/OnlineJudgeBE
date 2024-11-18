@@ -98,7 +98,7 @@ def fix_space(data, is_import=False):
     修正 HTML Tag 內容前後的空格問題
     '''
     empty_pattern_span = r"<span[^>]*><\/span>"
-    add_pattern = r"(?<=\S)<(a|span)( [^>]*)>([\s\S]+?)<\/\1>"
+    add_pattern = r"(?<=\S)<(a|span|u|i|strong)( [^>]*)?>([\s\S]+?)<\/\1>"
     add_pattern_code = r"(?<!<pre>)(?<=\S)<(code)([^>]*)>([\s\S]+?)<\/code>(?!<\/pre>)"
     final_pattern = r"(?=[^\\])> (\.|,|:|;|!|\?)"
 
@@ -117,7 +117,10 @@ def fix_space(data, is_import=False):
         return f">{groups[1]}"
     
     def get_group(match, index):
-        return match.group(index).strip()
+        str = match.group(index)
+        if str == None:
+            return ""
+        return str.strip()
     
     def get_groups(match):
         return [get_group(match, i) for i in range(0, match.lastindex + 1)] if match.lastindex != None else []
