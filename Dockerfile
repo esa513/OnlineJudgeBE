@@ -5,7 +5,7 @@ WORKDIR /app
 RUN <<EOS
 set -ex
 apk add unzip
-wget https://github.com/esa513/OnlineJudgeFE/releases/download/ntpu113/dist.zip
+wget https://github.com/esa513/OnlineJudgeFE/releases/latest/download/dist.zip
 unzip dist.zip
 rm -f dist.zip
 EOS
